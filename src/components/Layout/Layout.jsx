@@ -1,16 +1,29 @@
 
 import React from 'react'
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet,Routes,Route } from 'react-router-dom'
+import Game from '../Game/Game'
+import Stat from '../Stat/Stat'
+import styles from './Layout.module.css'
 
 function Layout() {
   return (
     <div > 
-     <div className="navbar" >
+     <div className={styles.navbar}  >
+
+       <NavLink  to = 'game'>Game</NavLink>
        <NavLink to = 'stat'>Stat</NavLink>
-       <NavLink to = 'game'>Game</NavLink>
      </div>
 
-    <Outlet/>
+  
+
+    
+ <Routes>
+
+       <Route path = "game/" element = {<Game/>}></Route>
+      <Route path = "stat" element = {<Stat/>}></Route>
+        
+
+       </Routes>
 
     </div>
   )

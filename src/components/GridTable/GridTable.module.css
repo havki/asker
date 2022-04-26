@@ -1,0 +1,17 @@
+.grid{
+  display: grid;
+  grid-template-columns: repeat(1,1fr);
+  background-color: rgba(0, 128, 0, 0.342);
+}
+.itemRow{
+
+  display: grid;
+  grid-template-columns: repeat(6,1fr);
+  
+  
+}
+h4{
+  color: rgb(1, 134, 134);
+  border: 1px solid #dfdfdf;
+  padding: 20px 0;
+}
