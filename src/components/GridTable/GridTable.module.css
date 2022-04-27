@@ -1,15 +1,16 @@
 .grid{
   display: grid;
-  grid-template-columns: repeat(1,1fr);
+  grid-template-columns: 20% 80%;
   background-color: rgba(0, 128, 0, 0.342);
 }
 .itemRow{
 
   display: grid;
-  grid-template-columns: repeat(6,1fr);
+  grid-template-columns: repeat(5,1fr);
   
   
 }
+
 h4{
   color: rgb(1, 134, 134);
   border: 1px solid #dfdfdf;

@@ -1,16 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../../api/axios.info";
+import Question from "../../components/Question/Question";
 
-export const profileFetch = createAsyncThunk(
-  "",
+export const categoriesFetch = createAsyncThunk(
+  "cat/get",
   async(_,{rejectWithValue,}) => {
     try {
-      const res = await axios.get(``);
+      const res = await axios.get(`/categories?count=5`);
       if(!res?.data){
         throw new Error();
 
       }
       return res.data;
+      
     }
     catch(error){
       return rejectWithValue(error.res.data)
@@ -38,8 +40,12 @@ export const recipePut = createAsyncThunk(
 export const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    user: null,
+    user: 'david',
     loading: "",
+    categories: null,
+    show: false,
+    questionData:null,
+    
   },
   reducers: {
     doSome: (state, action) => {
@@ -47,18 +53,26 @@ export const authSlice = createSlice({
     },
     addUser: (state,action) => {
       state.user = action.payload
+    },
+    showQuestion: (state,action) => {
+      state.show = action.payload
+    },
+    setQuestionData: (state,action)=>{
+      state.questionData= action.payload
     }
   },
   extraReducers: {
-    [profileFetch.pending]: (state) => {
+    [categoriesFetch.pending]: (state) => {
       state.loading= "loading"
 
   },
-  [profileFetch.fulfilled]: (state,action) => {
+  [categoriesFetch.fulfilled]: (state,action) => {
+    state.categories= action.payload
+    
     state.loading= "complete"
 
   },
-  [profileFetch.fulfilled]: (state) => {
+  [categoriesFetch.rejected]: (state) => {
   state.loading= "loading"
 
   },
@@ -81,4 +95,4 @@ export const authSlice = createSlice({
 
 });
 
-export const {doSome,addUser} = authSlice.actions
+export const {doSome,addUser,showQuestion,setQuestionData} = authSlice.actions
