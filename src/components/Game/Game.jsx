@@ -8,9 +8,10 @@ function Game() {
   const {show}  = useSelector((state)=> state.auth);
   
   return (
+   
     <>
     
-    {show && <Question/>}
+    {/* {show && <Question/>} */}
     {/* <Question/> */}
       <GridTable/>
     

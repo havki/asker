@@ -6,3 +6,32 @@
  background-color: brown;
 
 }
+
+h3{
+  text-decoration: none;
+}
+
+.button{
+  margin-top: 200px;
+  text-decoration:none; 
+  text-align:center; 
+  padding:11px 32px; 
+  border:solid 12px #004F72; 
+  -webkit-border-radius:16px;
+  -moz-border-radius:16px; 
+  border-radius: 16px; 
+  font:50px "MS Serif", "New York", serif; 
+  font-weight:bold; 
+  color:#E5FFFF; 
+  background-color:#00bfff; 
+  background-image: -moz-linear-gradient(top, #00bfff 0%, #b30b0b 100%); 
+  background-image: -webkit-linear-gradient(top, #00bfff 0%, #b30b0b 100%); 
+  background-image: -o-linear-gradient(top, #00bfff 0%, #b30b0b 100%); 
+  background-image: -ms-linear-gradient(top, #00bfff 0% ,#b30b0b 100%); 
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b30b0b', endColorstr='#b30b0b',GradientType=0 ); 
+  background-image: linear-gradient(top, #00bfff 0% ,#b30b0b 100%);   
+  -webkit-box-shadow:5px 0px 2px #f71313, inset 0px 0px 1px #ffffff; 
+  -moz-box-shadow: 5px 0px 2px #f71313,  inset 0px 0px 1px #ffffff;  
+  box-shadow:5px 0px 2px #f71313, inset 0px 0px 1px #ffffff;  
+   
+   }

@@ -1,34 +1,46 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../../api/axios.info";
 import Question from "../../components/Question/Question";
+import { date } from "../../helpers/Date";
 
 export const categoriesFetch = createAsyncThunk(
   "cat/get",
-  async(_,{rejectWithValue,}) => {
+  async (_, { rejectWithValue }) => {
     try {
       const res = await axios.get(`/categories?count=5`);
-      if(!res?.data){
+      if (!res?.data) {
         throw new Error();
-
       }
       return res.data;
-      
-    }
-    catch(error){
-      return rejectWithValue(error.res.data)
+    } catch (error) {
+      return rejectWithValue(error.res.data);
     }
   }
-)
+);
 
+export const cluesFetch = createAsyncThunk(
+  "clues/get",
+  async (id, { rejectWithValue }) => {
+    try {
+      const res = await axios.get(`/category?id=${id}`);
+      if (!res?.data) {
+        throw new Error();
+      }
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.res.data);
+    }
+  }
+);
 
 export const recipePut = createAsyncThunk(
   "",
-  async (data, { rejectWithValue,getState }) => {
+  async (data, { rejectWithValue, getState }) => {
     try {
-      let token =  getState().auth.user.token
+      let token = getState().auth.user.token;
       await axios.post("", data, {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
       });
     } catch (error) {
@@ -38,61 +50,153 @@ export const recipePut = createAsyncThunk(
 );
 
 export const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState: {
-    user: 'david',
+    needed: null,
+    questId:null,
+    clues: null,
+    questValue: 0,
+    user: null,
     loading: "",
     categories: null,
     show: false,
-    questionData:null,
-    
+    questionData: null,
+    currentGame: {
+      statCount: 0,
+      statRight: 0,
+      statWrong: 0,
+      statSumPoints: 0,
+      statStart: null,
+      statEndGame: null,
+    },
   },
   reducers: {
-    doSome: (state, action) => {
+    doSome: (state, action) => {},
+    addUser: (state, action) => {
+      state.user = action.payload;
+    },
+    showQuestion: (state, action) => {
+      state.show = action.payload;
+    },
+    setQuestionData: (state, action) => {
+      state.questionData = action.payload;
+    },
+    setQuestValue: (state, action) => {
+      state.questValue += action.payload;
+    },
+    setResult: (state, action) => {
+      state.result = action.payload;
+    },
+    setQuestId:(state,action)=>{
+      state.questId= action.payload
+    },
+    colorChanger:(state,action)=>{
+      console.log('====================================');
+      console.log(state.clues);
+      console.log('====================================');
+      state.clues.forEach((item)=>{
+        if(item.id===state.questId){
+          item.right=action.payload
+        } 
+      })
+     
       
     },
-    addUser: (state,action) => {
-      state.user = action.payload
+    
+
+    addRight: (state) => {
+      state.currentGame.statRight += 1;
     },
-    showQuestion: (state,action) => {
-      state.show = action.payload
+    addWrong: (state) => {
+      state.currentGame.statWrong += 1;
     },
-    setQuestionData: (state,action)=>{
-      state.questionData= action.payload
-    }
+    addCount: (state) => {
+      state.currentGame.statCount += 1;
+    },
+    addStart: (state) => {
+      state.currentGame.statStart = date();
+    },
+    addEnd: (state) => {
+      state.currentGame.statEndGame = date();
+    },
+    addStatPoints: (state, action) => {
+      state.currentGame.statSumPoints += action.payload;
+    },
+    clearData: (state) => {
+      state.currentGame = {
+        statCount: 0,
+        statRight: 0,
+        statWrong: 0,
+        statSumPoints: 0,
+        statStart: null,
+        statEndGame: null,
+      };
+    },
   },
   extraReducers: {
     [categoriesFetch.pending]: (state) => {
-      state.loading= "loading"
+      state.loading = "loading";
+    },
+    [categoriesFetch.fulfilled]: (state, action) => {
+      state.categories = action.payload;
 
+      state.loading = "complete";
+    },
+    [categoriesFetch.rejected]: (state) => {
+      state.loading = "loading";
+    },
+
+    [cluesFetch.pending]: (state) => {
+      state.loading = "loading";
+    },
+    [cluesFetch.fulfilled]: (state, action) => {
+      if (action.payload.clues.length > 5) {
+        action.payload.clues.length = 5;
+      }
+      let arr = action.payload.clues.map((item) => {
+        return {
+          ...item,
+          pressed: false,
+          right: null,
+        };
+      });
+     
+
+      state.clues=arr;
+     
+
+      state.loading = "complete";
+    },
+    [cluesFetch.rejected]: (state) => {
+      state.loading = "loading";
+    },
+
+    [recipePut.pending]: (state) => {
+      state.loading = "loading";
+    },
+    [recipePut.fulfilled]: (state, action) => {
+      state.loading = "complete";
+    },
+    [recipePut.fulfilled]: (state) => {
+      state.loading = "loading";
+    },
   },
-  [categoriesFetch.fulfilled]: (state,action) => {
-    state.categories= action.payload
-    
-    state.loading= "complete"
-
-  },
-  [categoriesFetch.rejected]: (state) => {
-  state.loading= "loading"
-
-  },
-
-
-  [recipePut.pending]: (state) => {
-    state.loading= "loading"
-
-  },
-  [recipePut.fulfilled]: (state,action) => {
-  state.loading= "complete"
-
-  },
-  [recipePut.fulfilled]: (state) => {
-  state.loading= "loading"
-
-  },
-
-},
-
 });
 
-export const {doSome,addUser,showQuestion,setQuestionData} = authSlice.actions
+export const {
+  colorChanger,
+  doSome,
+  addUser,
+  showQuestion,
+  setQuestionData,
+  setResult,
+  setQuestId,
+  addRight,
+  addWrong,
+  addCount,
+  addStart,
+  addEnd,
+  setQuestValue,
+  addStatPoints,
+  clearData,
+} = authSlice.actions;

@@ -1,106 +1,89 @@
-import * as React from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import * as React from "react";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import { useDispatch, useSelector } from "react-redux";
+import { Button, Stack, Typography } from "@mui/material";
+import { display } from "@mui/system";
+import { addEnd, addUser } from "../../store/reducers/auth.reducer";
+import { NavLink, useNavigate } from "react-router-dom";
+import { date } from "../../helpers/Date";
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
+function createData(name, calories, fat, carbs, protein, something) {
+  return { name, calories, fat, carbs, protein, something };
 }
 
-const rows = [
-  
-  {
-    name:'some',
-    value1: '1',
-    value2: '1',
-    value3: '1',
-    value4: '1',
-    value5: '1',
-    
-
-  },{
-    name:'some',
-    value1: '1',
-    value2: '1',
-    value3: '1',
-    value4: '1',
-    value5: '1',
-    
-
-  },
-  {
-    name:'some',
-    value1: '1',
-    value2: '1',
-    value3: '1',
-    value4: '1',
-    value5: '1',
-    
-
-  },
-  {
-    name:'some',
-    value1: '1',
-    value2: '1',
-    value3: '1',
-    value4: '1',
-    value5: '1',
-    
-
-  },
-  {
-    name:'some',
-    value1: '1',
-    value2: '1',
-    value3: '1',
-    value4: '1',
-    value5: '1',
-    
-
-  }
-  // createData('sdsd', 100, 200, 300, 400,500),
-  // createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  // createData('Eclair', 262, 16.0, 24, 6.0),
-  // createData('Cupcake', 305, 3.7, 67, 4.3),
-  // createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
+let vari = "sdsd";
 
 export default function BasicTable() {
+  const {
+    statCount,
+    statRight,
+    statWrong,
+    statSumPoints,
+    statStart,
+  } = useSelector((state) => state.auth.currentGame);
+  const dispatch = useDispatch();
+  const navigate= useNavigate();
+
+  const finishGame = () => {
+    dispatch(addUser(null));
+    dispatch(addEnd());
+  };
+ 
+
+  const rows = [
+    createData(statCount, statRight, statWrong, statSumPoints, statStart),
+  ];
   return (
-    <TableContainer component={Paper} sx= {{margin: '20px'}}>
+    <>
+    <TableContainer component={Paper} sx={{ padding: "20px" }}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        {/* <TableHead>
+        <TableHead>
           <TableRow>
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
+            <TableCell>Кол-во вопросов</TableCell>
+            <TableCell align="center">Верных ответов</TableCell>
+            <TableCell align="center">Неверных ответов</TableCell>
+            <TableCell align="center">Сумма балов</TableCell>
+            <TableCell align="center">Создано</TableCell>
+            <TableCell align="center">Действия</TableCell>
           </TableRow>
-        </TableHead> */}
+        </TableHead>
         <TableBody>
           {rows.map((row) => (
             <TableRow
               key={row.name}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
+              <TableCell  component="th" scope="row">
                 {row.name}
               </TableCell>
-             
-              <TableCell align="right">{row.value1}</TableCell>
-              <TableCell align="right">{row.value2}</TableCell>
-              <TableCell align="right">{row.value3}</TableCell>
-              <TableCell align="right">{row.value4}</TableCell>
-              <TableCell align="right">{row.value5}</TableCell>
+              <TableCell align="center">{row.calories}</TableCell>
+              <TableCell align="center">{row.fat}</TableCell>
+              <TableCell align="center">{row.carbs}</TableCell>
+              <TableCell align="center">{row.protein}</TableCell>
+              <TableCell  sx={{display:"flex",justifyContent:'center'}}>
+                <Stack spacing={1}>
+                <Button sx={{width:"120px"}} onClick={()=>navigate('/game')} variant="contained" color="success">
+                  Продолжить
+                </Button>
+                <Button sx={{width:"120px"}}  onClick={()=>finishGame()}  variant="outlined" color="error">
+                  Завершить
+                </Button>
+
+                </Stack>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
+
       </Table>
     </TableContainer>
+       
+</>
   );
 }

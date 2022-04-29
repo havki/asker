@@ -1,8 +1,9 @@
 import React from 'react'
+import BasicTable from "../Table/Table"
 
 function Stat() {
   return (
-    <div>Stat</div>
+    <BasicTable/>
   )
 }
 
