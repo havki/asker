@@ -95,14 +95,30 @@ export const authSlice = createSlice({
     },
     setCatId: (state,action)=>{
       state.catId = action.payload
+
+    },
+    setClues: (state,action)=>{
+      // console.log(action.payload);
+     let categs = state.categories.map((item)=>{
+        return{
+          ...item,
+          clues:action.payload
+          
+        }
+      })
+      state.categories=categs
     },
     colorChanger:(state,action)=>{
      
-      state.clues.forEach((item)=>{
-        if(item.id===state.questId){
-          item.right=action.payload
-        } 
+      state.categories.forEach((item)=>{
+        item.clues.forEach((item)=>{
+          if(item.id===state.questId){
+            item.right=action.payload
+          } 
+        })
       })
+
+         
      
       
     },
@@ -167,8 +183,18 @@ export const authSlice = createSlice({
       });
      
 
-      state.clues=arr;
+      // state.clues=arr;
       //  state.clues.push(arr)
+
+      let categs = state.categories.map((item)=>{
+        return{
+          ...item,
+          clues:arr
+
+          
+        }
+      })
+      state.categories=categs
      
 
       state.loading = "complete";
@@ -205,5 +231,6 @@ export const {
   setQuestValue,
   addStatPoints,
   clearData,
-  setCatId
+  setCatId,
+  setClues
 } = authSlice.actions;

@@ -18,16 +18,17 @@ import "./GridTable.css";
 import Question from "../Question/Question";
 import { style } from "@mui/system";
 
-function RowItems({ id, title }) {
+function RowItems({ id, title ,clues}) {
   const dispatch = useDispatch();
   // const [clues, setClues] = useState(null)
   const [pressed, setPressed] = useState(false);
-  const clues = useSelector((state) => state.auth.clues);
+  // const clues = useSelector((state) => state.auth.clues);
+  const categories = useSelector((state) => state.auth.categories);
   const user = useSelector((state) => state.auth.user);
   const { show, result } = useSelector((state) => state.auth);
   const reff = useRef(null);
 
-  // const isMounted = useRef(false);
+  const isMounted = useRef(false);
 
   // useEffect(() => {
   //   if (isMounted.current) {
@@ -55,7 +56,7 @@ function RowItems({ id, title }) {
   
   
   useEffect(() => {
-    if(!clues){
+    if(!clues && isMounted.current){
 
      dispatch(cluesFetch(id));
 
@@ -73,12 +74,19 @@ function RowItems({ id, title }) {
     //      };
     //    });
  
-    //    setClues(arr);
+    //   //  setClues(arr);
+    //    dispatch(setClues(arr))
     //  };
     //  fetchData().catch(console.error);
 
     }
-  }, []);
+    else {
+          isMounted.current = true;
+        }
+  }, [dispatch,id]);
+
+
+  // console.log(clues);
 
   const showQuest = (item, e) => {
     dispatch(setQuestId(item.id));
@@ -170,6 +178,7 @@ function GridTable() {
 
       <div className={styles.gridCont}>
         {categories.map((item) => {
+          // console.log(item);
           return (
             <div key={item.id} className={styles.grid}>
               <h4 onClick={(e) => foo(e)}>{item.title} </h4>
