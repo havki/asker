@@ -87,13 +87,13 @@ export default function Question({ id, closed }) {
 
   const submitHandler = () => {
     
-    if ((questionData.answer !== answer) || seconds<2) {
+    if (questionData.answer !== answer)  {
       dispatch(colorChanger('wrong'))
       notify();
       dispatch(addWrong());
       dispatch(addStatPoints(-questValue));
     } else {
-      dispatch(colorChanger(false))
+      dispatch(colorChanger('right'))
       dispatch(addRight('right'));
       dispatch(addStatPoints(questValue));
       notifygood();

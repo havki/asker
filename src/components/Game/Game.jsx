@@ -8,6 +8,8 @@ function Game() {
   const {show}  = useSelector((state)=> state.auth);
   
   return (
+
+    
    
     <>
     

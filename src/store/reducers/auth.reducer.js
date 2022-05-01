@@ -20,8 +20,10 @@ export const categoriesFetch = createAsyncThunk(
 
 export const cluesFetch = createAsyncThunk(
   "clues/get",
-  async (id, { rejectWithValue }) => {
+  async (id, { rejectWithValue,getState }) => {
+    
     try {
+      // let id = getState().auth.catId
       const res = await axios.get(`/category?id=${id}`);
       if (!res?.data) {
         throw new Error();
@@ -60,6 +62,7 @@ export const authSlice = createSlice({
     loading: "",
     categories: null,
     show: false,
+    catId: null,
     questionData: null,
     currentGame: {
       statCount: 0,
@@ -90,10 +93,11 @@ export const authSlice = createSlice({
     setQuestId:(state,action)=>{
       state.questId= action.payload
     },
+    setCatId: (state,action)=>{
+      state.catId = action.payload
+    },
     colorChanger:(state,action)=>{
-      console.log('====================================');
-      console.log(state.clues);
-      console.log('====================================');
+     
       state.clues.forEach((item)=>{
         if(item.id===state.questId){
           item.right=action.payload
@@ -150,19 +154,21 @@ export const authSlice = createSlice({
       state.loading = "loading";
     },
     [cluesFetch.fulfilled]: (state, action) => {
+      console.log('asd');
       if (action.payload.clues.length > 5) {
         action.payload.clues.length = 5;
       }
       let arr = action.payload.clues.map((item) => {
         return {
           ...item,
-          pressed: false,
           right: null,
         };
+     
       });
      
 
       state.clues=arr;
+      //  state.clues.push(arr)
      
 
       state.loading = "complete";
@@ -199,4 +205,5 @@ export const {
   setQuestValue,
   addStatPoints,
   clearData,
+  setCatId
 } = authSlice.actions;

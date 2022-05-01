@@ -14,7 +14,7 @@ import { categoriesFetch, cluesFetch } from './store/reducers/auth.reducer';
 
 function App() {
 
-  const {user} = useSelector((state)=> state.auth)
+  const {user,catId} = useSelector((state)=> state.auth)
   const [data, setData] = useState({})
   const navigate = useNavigate()
   const dispatch =useDispatch()
@@ -30,7 +30,7 @@ function App() {
     if(!user){
       navigate('auth')
       dispatch(categoriesFetch())
-      // dispatch(cluesFetch())
+      // dispatch(cluesFetch(catId))
     }
 
 

@@ -16,42 +16,72 @@ import { showQuestion } from "../../store/reducers/auth.reducer";
 import cn from "classnames";
 import "./GridTable.css";
 import Question from "../Question/Question";
+import { style } from "@mui/system";
 
 function RowItems({ id, title }) {
   const dispatch = useDispatch();
   // const [clues, setClues] = useState(null)
   const [pressed, setPressed] = useState(false);
   const clues = useSelector((state) => state.auth.clues);
+  const user = useSelector((state) => state.auth.user);
   const { show, result } = useSelector((state) => state.auth);
   const reff = useRef(null);
 
-  useEffect(() => {
-    dispatch(cluesFetch(id));
-    // const fetchData = async () => {
-    //   const response = await axios.get(`/category?id=${id}`);
+  // const isMounted = useRef(false);
 
-    //   const res = response.data;
-    //   if (res.clues.length > 5) {
-    //     res.clues.length = 5;
-    //   }
-    //   let arr = res.clues.map((item) => {
-    //     return {
-    //       ...item,
-    //       pressed: false,
-    //       right: false,
-    //     };
-    //   });
+  // useEffect(() => {
+  //   if (isMounted.current) {
+  //     console.log('fetching');
+  //     dispatch(cluesFetch(id));
+  //   } else {
+  //     isMounted.current = true;
+  //   }
+  // }, [dispatch, id]);
 
+
+  // const isFirstRender = useRef(true);
+
+  // useEffect(() => {
+  //   if (isFirstRender.current) {
+  //     isFirstRender.current = false;
+  //   } else {
+  //     console.log("fetching");
+  //     dispatch(cluesFetch(id));
+  //   }
+  // }, [dispatch, id]);
   
+  
+  
+  
+  
+  useEffect(() => {
+    if(!clues){
 
-    //   setClues(arr);
-    // };
-    // fetchData().catch(console.error);
+     dispatch(cluesFetch(id));
+
+    //  const fetchData = async () => {
+    //    const response = await axios.get(`/category?id=${id}`);
+ 
+    //    const res = response.data;
+    //    if (res.clues.length > 5) {
+    //      res.clues.length = 5;
+    //    }
+    //    let arr = res.clues.map((item) => {
+    //      return {
+    //        ...item,
+    //        right: null,
+    //      };
+    //    });
+ 
+    //    setClues(arr);
+    //  };
+    //  fetchData().catch(console.error);
+
+    }
   }, []);
 
   const showQuest = (item, e) => {
-   
-    dispatch(setQuestId(item.id))   
+    dispatch(setQuestId(item.id));
     dispatch(setQuestValue(parseInt(e.target.innerText)));
     if (e.target.innerText !== "") {
       dispatch(setQuestionData(item));
@@ -72,29 +102,43 @@ function RowItems({ id, title }) {
         counter += 100;
         return (
           <>
-          {
-            (!item.right) ?
-          <h4
-            id={counter}
-            className={counter}
-            onClick={(e) => showQuest(item, e)}
-            key={item.id}
-          >
-            {counter}
-          </h4>
-          :
-          <h4
-          id={counter}
-          className={counter}
-          onClick={(e) => showQuest(item, e)}
-          key={item.id}
-        >
-          {counter}
-        </h4>
-
-           
-          }
-          
+            {!item.right && (
+              <h4
+                id={counter}
+                className={counter}
+                onClick={(e) => showQuest(item, e)}
+                key={item.id}
+              >
+                {counter}
+              </h4>
+            )}
+            
+            {
+              (item.right === 'right') && (
+                <h4
+                id={counter}
+                className={counter}
+                style={{backgroundColor:"green"}}
+                // onClick={(e) => showQuest(item, e)}
+                key={item.id}
+              >
+                {counter}
+              </h4>
+              )
+            }
+            {
+              (item.right === 'wrong') && (
+                <h4
+                id={counter}
+                className={counter}
+                style={{backgroundColor:"red"}}
+                // onClick={(e) => showQuest(item, e)}
+                key={item.id}
+              >
+                {counter}
+              </h4>
+              )
+            }
           </>
 
           // {cn(styles.cell,{[styles.active]:pressed})}
