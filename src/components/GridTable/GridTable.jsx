@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   categoriesFetch,
   cluesFetch,
+  setCatId,
+  setClue,
   setClues,
   setQuestId,
   setQuestionData,
@@ -57,28 +59,36 @@ function RowItems({ id, title ,clues}) {
   
   useEffect(() => {
     if(!clues && isMounted.current){
-
-     dispatch(cluesFetch(id));
-
-    //  const fetchData = async () => {
-    //    const response = await axios.get(`/category?id=${id}`);
+      
+      
+       const fetchData = async () => {
+           const response = await axios.get(`/category?id=${id}`);
  
-    //    const res = response.data;
-    //    if (res.clues.length > 5) {
-    //      res.clues.length = 5;
-    //    }
-    //    let arr = res.clues.map((item) => {
-    //      return {
-    //        ...item,
-    //        right: null,
-    //      };
-    //    });
- 
-    //   //  setClues(arr);
-    //    dispatch(setClues(arr))
-    //  };
-    //  fetchData().catch(console.error);
+           const res = response.data;
+           if (res.clues.length > 5) {
+               res.clues.length = 5;
+             }
+             let clues = res.clues.map((item) => {
+                 return {
+                   
+                   
 
+                     ...item,
+                     right: null,
+                  
+                   };
+                 });
+              
+                //  setClues(arr);
+                // dispatch(setClue(clues))
+                 dispatch(setClues({clues,id,title,}))
+
+               };
+               fetchData().catch(console.error);
+              //  dispatch(cluesFetch(id));
+              //  dispatch(setCatId(id))
+              
+              
     }
     else {
           isMounted.current = true;

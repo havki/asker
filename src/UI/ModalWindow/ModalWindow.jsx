@@ -8,6 +8,7 @@ import zIndex from '@mui/material/styles/zIndex';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../../store/reducers/auth.reducer';
 import { Navigate, useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from "react-toastify";
 
 
 const style = {
@@ -24,7 +25,7 @@ const style = {
 };
 
 export default function BasicModal({id,closed}) {
-  const [user, setUser] = React.useState({});
+  const [user, setUser] = React.useState('');
 
   const [open, setOpen] = React.useState(true);
   const handleOpen = () => setOpen(true);
@@ -32,13 +33,46 @@ export default function BasicModal({id,closed}) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const notify = () => {
+    toast.error("Введите кириллицу", {
+      position: toast.POSITION.TOP_LEFT,
+    });
+  };
+
   const changeHandler = (e) => {
-   setUser(e.target.value)
+    setUser(e.target.value)
+    // if (/^[A-Z0-9a-zа-яA-Я_]{2,20}$/i.test(e.target.value)){
+
+    // }
+    // else{
+    //   alert('dasdasd')
+    // }
    
+  }
+
+  let reg1 = /[a-z]/ ;
+  const submitHandler = () => {
+    if(!validate(reg1,user)&& user !== ""){
+      dispatch(addUser(user))
+      navigate('/')
+      
+    }
+    else{
+     notify()
+    }
+  }
+
+  function validate(regex,input){
+    return regex.test(input)
   }
 
   return (
     <div>
+       
+           
+
+           <ToastContainer />
+         
       {/* <Button onClick={handleOpen}>Open modal</Button> */}
       <Modal
         open={open}
@@ -54,7 +88,7 @@ export default function BasicModal({id,closed}) {
           </Typography>
          <Stack direction="row" justifyContent="center" spacing={2}  divider={<Divider orientation="vertical" flexItem />}>
           <Button  size="small" onClick = {()=> closed(false)}>Отмена</Button>
-          <Button ml={4} onClick={() => dispatch(addUser(user),navigate('/'))} size="small">Confirm</Button>
+          <Button ml={4} onClick={() => submitHandler()} size="small">Confirm</Button>
           <TextField
                 onChange={changeHandler}
                 name="name"

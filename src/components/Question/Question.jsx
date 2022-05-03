@@ -63,14 +63,29 @@ export default function Question({ id, closed }) {
     intervalRef.current = setInterval(() => {
       setSeconds((sec) => sec - 1);
     }, 1000);
-    return () => clearInterval(intervalRef.current);
+    return () => {
+      clearInterval(intervalRef.current);
+      
+      
+    }
   }, []);
+
+  
 
   const cancelInterval = () => {
     if (seconds < 1) {
-     
+      
       
       clearInterval(intervalRef.current);
+      dispatch(colorChanger('wrong'))
+      notify();
+      // dispatch(addWrong());
+      // dispatch(addStatPoints(-questValue));
+     
+      setTimeout(() => {
+        dispatch(showQuestion(false));
+        // dispatch(addCount());
+      }, 1000);
       
     }
   };
@@ -84,7 +99,6 @@ export default function Question({ id, closed }) {
   const changeHandler = (e) => {
     setAnswer(e.target.value);
   };
-
   const submitHandler = () => {
     
     if (questionData.answer !== answer)  {
@@ -105,6 +119,11 @@ export default function Question({ id, closed }) {
     }, 1000);
   };
 
+  if(seconds<1){
+    
+  }
+
+
   if (!questionData) {
     return <Loading />;
   }
@@ -112,8 +131,9 @@ export default function Question({ id, closed }) {
   return (
     <div>
       <Modal
+      
         open={open}
-        onClose={handleClose}
+        // onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >

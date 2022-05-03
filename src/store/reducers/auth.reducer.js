@@ -20,8 +20,7 @@ export const categoriesFetch = createAsyncThunk(
 
 export const cluesFetch = createAsyncThunk(
   "clues/get",
-  async (id, { rejectWithValue,getState }) => {
-    
+  async (id, { rejectWithValue, getState }) => {
     try {
       // let id = getState().auth.catId
       const res = await axios.get(`/category?id=${id}`);
@@ -55,8 +54,9 @@ export const authSlice = createSlice({
   name: "auth",
   initialState: {
     needed: null,
-    questId:null,
-    clues: null,
+    questId: null,
+    clues: [],
+    clue: null,
     questValue: 0,
     user: null,
     loading: "",
@@ -85,44 +85,51 @@ export const authSlice = createSlice({
       state.questionData = action.payload;
     },
     setQuestValue: (state, action) => {
-      state.questValue += action.payload;
+      state.questValue = action.payload;
     },
     setResult: (state, action) => {
       state.result = action.payload;
     },
-    setQuestId:(state,action)=>{
-      state.questId= action.payload
+    setQuestId: (state, action) => {
+      state.questId = action.payload;
     },
-    setCatId: (state,action)=>{
-      state.catId = action.payload
-
+    setCatId: (state, action) => {
+      state.catId = action.payload;
     },
-    setClues: (state,action)=>{
-      // console.log(action.payload);
-     let categs = state.categories.map((item)=>{
-        return{
-          ...item,
-          clues:action.payload
-          
-        }
-      })
-      state.categories=categs
+    setClues: (state, action) => {
+      const {clues,id,title}= action.payload
+      console.log(clues);
+      let data = {
+        id,
+        title,
+        clues
+      }
+      state.categories.push(data)
+      state.categories.splice(0, 1);
+      console.log(data);
+      // let categs = state.arr.map((item)=>{
+        
+      // })
+      // let categs = state.categories.map((item) => {
+      //   return {
+      //     ...item,
+      //     clues: state.clue,
+      //   };
+      // });
+      // state.categories = categs;
     },
-    colorChanger:(state,action)=>{
-     
-      state.categories.forEach((item)=>{
-        item.clues.forEach((item)=>{
-          if(item.id===state.questId){
-            item.right=action.payload
-          } 
-        })
-      })
-
-         
-     
-      
+    setClue: (state, action) => {
+      state.clue = action.payload;
     },
-    
+    colorChanger: (state, action) => {
+      state.categories.forEach((item) => {
+        item.clues.forEach((item) => {
+          if (item.id === state.questId) {
+            item.right = action.payload;
+          }
+        });
+      });
+    },
 
     addRight: (state) => {
       state.currentGame.statRight += 1;
@@ -167,35 +174,59 @@ export const authSlice = createSlice({
     },
 
     [cluesFetch.pending]: (state) => {
+      console.log(state.catId);
       state.loading = "loading";
     },
     [cluesFetch.fulfilled]: (state, action) => {
-      console.log('asd');
+      console.log(state.catId);
       if (action.payload.clues.length > 5) {
         action.payload.clues.length = 5;
       }
+      // console.log(action.payload);
+      // for (const key in action.payload.clues) {
+      // action.payload.clues={
+      //   ...action.payload.clues,
+      //         right: null,
+      // }
+
+      // }
       let arr = action.payload.clues.map((item) => {
         return {
           ...item,
           right: null,
         };
-     
+
+        // return {
+        //   ...item,
+        //   right: null,
+        // };
       });
+      // state.clues.push(clues)
+      // console.log(state.clues);
+
+      // console.log(clues);
+      // console.log(clues);
+      let cluess = {
+        clues: arr,
+      };
+
+      
+      
+      state.clues.push(cluess);
+      state.categories[0]={
+        ...state.categories[0],
+        clues:arr
+      }
+      
      
-
-      // state.clues=arr;
-      //  state.clues.push(arr)
-
-      let categs = state.categories.map((item)=>{
-        return{
-          ...item,
-          clues:arr
-
-          
-        }
-      })
-      state.categories=categs
-     
+      // let categs = state.categories.map((item) => {
+      //   return {
+      //     ...item,
+      //    clues:arr
+      //   };
+      // });
+      // state.categories.push(categs)
+      
 
       state.loading = "complete";
     },
@@ -232,5 +263,54 @@ export const {
   addStatPoints,
   clearData,
   setCatId,
-  setClues
+  setClues,
+  setClue,
 } = authSlice.actions;
+
+
+
+// for (let i = 0; i < state.categories.length; i++) {
+//   switch (i) {
+//     case 0:
+//       state.categories[0] = {
+//         ...state.categories[0],
+//         clues: arr,
+//       };
+//       break;
+
+//     case 1:
+//       state.categories[1] = {
+//         ...state.categories[1],
+//         clues: arr,
+//       };
+//     break;
+
+
+//     case 2:
+//       state.categories[2] = {
+//         ...state.categories[2],
+//         clues: arr,
+//       };
+//     break;
+
+
+//     case 3:
+//       state.categories[3] = {
+//         ...state.categories[3],
+//         clues: arr,
+//       };
+//     break;
+
+
+//     case 4:
+//       state.categories[4] = {
+//         ...state.categories[4],
+//         clues: arr,
+//       };
+//     break;
+
+
+//     default:
+//       break;
+//   }
+// }
