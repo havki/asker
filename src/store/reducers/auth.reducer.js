@@ -22,12 +22,12 @@ export const cluesFetch = createAsyncThunk(
   "clues/get",
   async (id, { rejectWithValue, getState }) => {
     try {
-      // let id = getState().auth.catId
+      
       const res = await axios.get(`/category?id=${id}`);
       if (!res?.data) {
         throw new Error();
       }
-      return res.data;
+      return {clues:res.data,catId:id};
     } catch (error) {
       return rejectWithValue(error.res.data);
     }
@@ -58,7 +58,7 @@ export const authSlice = createSlice({
     clues: [],
     clue: null,
     questValue: 0,
-    user: null,
+    user: 'davi',
     loading: "",
     categories: null,
     show: false,
@@ -178,18 +178,12 @@ export const authSlice = createSlice({
       state.loading = "loading";
     },
     [cluesFetch.fulfilled]: (state, action) => {
-      console.log(state.catId);
+      const {clues,catId} = action.payload
+      console.log(catId);
       if (action.payload.clues.length > 5) {
         action.payload.clues.length = 5;
       }
-      // console.log(action.payload);
-      // for (const key in action.payload.clues) {
-      // action.payload.clues={
-      //   ...action.payload.clues,
-      //         right: null,
-      // }
-
-      // }
+      
       let arr = action.payload.clues.map((item) => {
         return {
           ...item,
