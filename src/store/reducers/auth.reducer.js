@@ -1,54 +1,8 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "../../api/axios.info";
-import Question from "../../components/Question/Question";
+import { createSlice} from "@reduxjs/toolkit";
 import { date } from "../../helpers/Date";
+import { cluesFetch,categoriesFetch } from "../asyncActions/clues";
 
-export const categoriesFetch = createAsyncThunk(
-  "cat/get",
-  async (_, { rejectWithValue }) => {
-    try {
-      const res = await axios.get(`/categories?count=5`);
-      if (!res?.data) {
-        throw new Error();
-      }
-      return res.data;
-    } catch (error) {
-      return rejectWithValue(error.res.data);
-    }
-  }
-);
 
-export const cluesFetch = createAsyncThunk(
-  "clues/get",
-  async (id, { rejectWithValue, getState }) => {
-    try {
-      
-      const res = await axios.get(`/category?id=${id}`);
-      if (!res?.data) {
-        throw new Error();
-      }
-      return {clues:res.data,catId:id};
-    } catch (error) {
-      return rejectWithValue(error.res.data);
-    }
-  }
-);
-
-export const recipePut = createAsyncThunk(
-  "",
-  async (data, { rejectWithValue, getState }) => {
-    try {
-      let token = getState().auth.user.token;
-      await axios.post("", data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-    } catch (error) {
-      return rejectWithValue(error);
-    }
-  }
-);
 
 export const authSlice = createSlice({
   name: "auth",
@@ -58,7 +12,7 @@ export const authSlice = createSlice({
     clues: [],
     clue: null,
     questValue: 0,
-    user: 'davi',
+    user: null,
     loading: "",
     categories: null,
     show: false,
@@ -97,26 +51,15 @@ export const authSlice = createSlice({
       state.catId = action.payload;
     },
     setClues: (state, action) => {
-      const {clues,id,title}= action.payload
-      console.log(clues);
+      const { clues, id, title } = action.payload;
       let data = {
         id,
         title,
-        clues
-      }
-      state.categories.push(data)
+        clues,
+      };
+      state.categories.push(data);
       state.categories.splice(0, 1);
       console.log(data);
-      // let categs = state.arr.map((item)=>{
-        
-      // })
-      // let categs = state.categories.map((item) => {
-      //   return {
-      //     ...item,
-      //     clues: state.clue,
-      //   };
-      // });
-      // state.categories = categs;
     },
     setClue: (state, action) => {
       state.clue = action.payload;
@@ -174,53 +117,30 @@ export const authSlice = createSlice({
     },
 
     [cluesFetch.pending]: (state) => {
-      console.log(state.catId);
       state.loading = "loading";
     },
     [cluesFetch.fulfilled]: (state, action) => {
-      const {clues,catId} = action.payload
-      console.log(catId);
-      if (action.payload.clues.length > 5) {
-        action.payload.clues.length = 5;
+      const { data, id, title } = action.payload;
+      console.log(action.payload);
+      if (data.clues.length > 5) {
+        data.clues.length = 5;
       }
-      
-      let arr = action.payload.clues.map((item) => {
+
+      let clues = data.clues.map((item) => {
         return {
           ...item,
           right: null,
         };
-
-        // return {
-        //   ...item,
-        //   right: null,
-        // };
       });
-      // state.clues.push(clues)
-      // console.log(state.clues);
 
-      // console.log(clues);
-      // console.log(clues);
-      let cluess = {
-        clues: arr,
+      let datas = {
+        id,
+        title,
+        clues,
       };
-
-      
-      
-      state.clues.push(cluess);
-      state.categories[0]={
-        ...state.categories[0],
-        clues:arr
-      }
-      
-     
-      // let categs = state.categories.map((item) => {
-      //   return {
-      //     ...item,
-      //    clues:arr
-      //   };
-      // });
-      // state.categories.push(categs)
-      
+      state.categories.push(data);
+      state.categories.splice(0, 1);
+      console.log(datas);
 
       state.loading = "complete";
     },
@@ -228,15 +148,7 @@ export const authSlice = createSlice({
       state.loading = "loading";
     },
 
-    [recipePut.pending]: (state) => {
-      state.loading = "loading";
-    },
-    [recipePut.fulfilled]: (state, action) => {
-      state.loading = "complete";
-    },
-    [recipePut.fulfilled]: (state) => {
-      state.loading = "loading";
-    },
+    
   },
 });
 
@@ -260,51 +172,3 @@ export const {
   setClues,
   setClue,
 } = authSlice.actions;
-
-
-
-// for (let i = 0; i < state.categories.length; i++) {
-//   switch (i) {
-//     case 0:
-//       state.categories[0] = {
-//         ...state.categories[0],
-//         clues: arr,
-//       };
-//       break;
-
-//     case 1:
-//       state.categories[1] = {
-//         ...state.categories[1],
-//         clues: arr,
-//       };
-//     break;
-
-
-//     case 2:
-//       state.categories[2] = {
-//         ...state.categories[2],
-//         clues: arr,
-//       };
-//     break;
-
-
-//     case 3:
-//       state.categories[3] = {
-//         ...state.categories[3],
-//         clues: arr,
-//       };
-//     break;
-
-
-//     case 4:
-//       state.categories[4] = {
-//         ...state.categories[4],
-//         clues: arr,
-//       };
-//     break;
-
-
-//     default:
-//       break;
-//   }
-// }

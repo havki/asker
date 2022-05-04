@@ -17,7 +17,6 @@ function createData(name, calories, fat, carbs, protein, something) {
   return { name, calories, fat, carbs, protein, something };
 }
 
-let vari = "sdsd";
 
 export default function BasicTable() {
   const {
