@@ -8,7 +8,6 @@ export const authSlice = createSlice({
   name: "auth",
   initialState: {
     questId: null,
-    clue: null,
     questValue: 0,
     user: null,
     loading: "",
@@ -39,9 +38,6 @@ export const authSlice = createSlice({
     setQuestValue: (state, action) => {
       state.questValue = action.payload;
     },
-    setResult: (state, action) => {
-      state.result = action.payload;
-    },
     setQuestId: (state, action) => {
       state.questId = action.payload;
     },
@@ -57,10 +53,6 @@ export const authSlice = createSlice({
       };
       state.categories.push(data);
       state.categories.splice(0, 1);
-      console.log(data);
-    },
-    setClue: (state, action) => {
-      state.clue = action.payload;
     },
     colorChanger: (state, action) => {
       state.categories.forEach((item) => {

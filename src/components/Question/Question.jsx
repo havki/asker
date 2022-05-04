@@ -4,19 +4,15 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { Divider, Stack, TextField } from "@mui/material";
-import zIndex from "@mui/material/styles/zIndex";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addCount,
   addRight,
   addStatPoints,
-  addUser,
   addWrong,
   colorChanger,
-  setResult,
   showQuestion,
 } from "../../store/reducers/auth.reducer";
-import { Navigate, useNavigate } from "react-router-dom";
 import Loading from "../../UI/Loading/Loading";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -35,15 +31,14 @@ const style = {
 };
 
 export default function Question({ id, closed }) {
-  const [user, setUser] = React.useState({});
 
   const [open, setOpen] = React.useState(true);
   const [answer, setAnswer] = React.useState(null);
 
-
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { questionData, questValue,result } = useSelector((state) => state.auth);
+  const { questionData, questValue} = useSelector(
+    (state) => state.auth
+  );
   const [seconds, setSeconds] = React.useState(10);
   const intervalRef = React.useRef();
 
@@ -65,28 +60,17 @@ export default function Question({ id, closed }) {
     }, 1000);
     return () => {
       clearInterval(intervalRef.current);
-      
-      
-    }
+    };
   }, []);
-
-  
 
   const cancelInterval = () => {
     if (seconds < 1) {
-      
-      
       clearInterval(intervalRef.current);
-      dispatch(colorChanger('wrong'))
+      dispatch(colorChanger("wrong"));
       notify();
-      // dispatch(addWrong());
-      // dispatch(addStatPoints(-questValue));
-     
       setTimeout(() => {
         dispatch(showQuestion(false));
-        // dispatch(addCount());
       }, 1000);
-      
     }
   };
 
@@ -100,18 +84,16 @@ export default function Question({ id, closed }) {
     setAnswer(e.target.value);
   };
   const submitHandler = () => {
-    
-    if (questionData.answer !== answer)  {
-      dispatch(colorChanger('wrong'))
+    if (questionData.answer !== answer) {
+      dispatch(colorChanger("wrong"));
       notify();
       dispatch(addWrong());
       dispatch(addStatPoints(-questValue));
     } else {
-      dispatch(colorChanger('right'))
-      dispatch(addRight('right'));
+      dispatch(colorChanger("right"));
+      dispatch(addRight("right"));
       dispatch(addStatPoints(questValue));
       notifygood();
-
     }
     setTimeout(() => {
       dispatch(showQuestion(false));
@@ -119,10 +101,8 @@ export default function Question({ id, closed }) {
     }, 1000);
   };
 
-  if(seconds<1){
-    
+  if (seconds < 1) {
   }
-
 
   if (!questionData) {
     return <Loading />;
@@ -131,7 +111,6 @@ export default function Question({ id, closed }) {
   return (
     <div>
       <Modal
-      
         open={open}
         // onClose={handleClose}
         aria-labelledby="modal-modal-title"
@@ -157,8 +136,6 @@ export default function Question({ id, closed }) {
               OK
             </Button>
             <div>
-           
-
               <ToastContainer />
             </div>
 
