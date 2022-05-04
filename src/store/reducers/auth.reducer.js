@@ -58,7 +58,7 @@ export const authSlice = createSlice({
     clues: [],
     clue: null,
     questValue: 0,
-    user: 'davi',
+    user: 'david',
     loading: "",
     categories: null,
     show: false,
