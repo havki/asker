@@ -32,3 +32,7 @@ switch (Month)
 
 return `${Hour}:${Minutes}:${Seconds} ${Day} ${fMonth} ${Year} года `
 }
+
+export default function validate(regex,input){
+  return regex.test(input)
+}

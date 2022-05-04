@@ -7,9 +7,7 @@ import { cluesFetch,categoriesFetch } from "../asyncActions/clues";
 export const authSlice = createSlice({
   name: "auth",
   initialState: {
-    needed: null,
     questId: null,
-    clues: [],
     clue: null,
     questValue: 0,
     user: null,

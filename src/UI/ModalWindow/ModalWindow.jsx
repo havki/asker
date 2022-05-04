@@ -4,11 +4,11 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { Divider, Stack, TextField } from '@mui/material';
-import zIndex from '@mui/material/styles/zIndex';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../../store/reducers/auth.reducer';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from "react-toastify";
+import validate from "../../helpers/Date"
 
 
 const style = {
@@ -41,12 +41,6 @@ export default function BasicModal({id,closed}) {
 
   const changeHandler = (e) => {
     setUser(e.target.value)
-    // if (/^[A-Z0-9a-zа-яA-Я_]{2,20}$/i.test(e.target.value)){
-
-    // }
-    // else{
-    //   alert('dasdasd')
-    // }
    
   }
 
@@ -62,9 +56,7 @@ export default function BasicModal({id,closed}) {
     }
   }
 
-  function validate(regex,input){
-    return regex.test(input)
-  }
+  
 
   return (
     <div>
