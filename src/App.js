@@ -1,6 +1,6 @@
 import "./App.css";
 import { useEffect } from "react";
-import {  Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
 import { useDispatch, useSelector } from "react-redux";
 import Login from "./pages/Login/Login";
@@ -24,9 +24,10 @@ function App() {
     <div className="App">
       {user ? (
         <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route path="game" element={<Game />}></Route>
-            <Route path="stat" element={<Stat />}></Route>
+          <Route path="/" element={<Layout />} >
+            <Route path="game" element={<Game />} />
+            <Route path="stat" element={<Stat />} />
+            <Route />
           </Route>
           <Route path="*" element={<p>There's nothing here: 404!</p>} />
         </Routes>

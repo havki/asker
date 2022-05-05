@@ -20,7 +20,7 @@ function Game() {
   return (
     <>
       {show  && <Question />}
-      {categs.length >= 4 ?
+      {categs.length >= 5 ?
       <div className={styles.gridCont}>
         {categs.map((item) => {
           return (
