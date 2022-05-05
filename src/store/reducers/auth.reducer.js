@@ -39,7 +39,7 @@ export const authSlice = createSlice({
       state.categories.splice(0, 1);
     },
     colorChanger: (state, action) => {
-      state.categories.forEach((item) => {
+      state.categs.forEach((item) => {
         item.clues.forEach((item) => {
           if (item.id === state.questId) {
             item.right = action.payload;

@@ -37,12 +37,12 @@ export const  extraReducers = {
       clues,
     };
     
-    state.categories.push(datas);
-    if(state.categories.length===10){
+    state.categs.push(datas);
+    // if(state.categories.length===10){
 
-      state.categories.splice(0, 5);
-    }
-    console.log(state.categories);
+    //   state.categories.splice(0, 5);
+    // }
+    // console.log(state.categories);
 
     state.loading = "complete";
   },

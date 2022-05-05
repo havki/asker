@@ -20,6 +20,18 @@ function Game() {
   return (
     <>
       {show  && <Question />}
+      {categs.length >= 4 ?
+      <div className={styles.gridCont}>
+        {categs.map((item) => {
+          return (
+            <div key={item.id} className={styles.grid}>
+              <h4>{item.title} </h4>
+             <RowItems  {...item} />
+            </div>
+          );
+        })}
+      </div>
+      :
       <div className={styles.gridCont}>
         {categories.map((item) => {
           return (
@@ -30,6 +42,9 @@ function Game() {
           );
         })}
       </div>
+      }
+
+
       <div className="count">
         <h1 style={{ color: "white" }}>Счёт {statSumPoints} </h1>
       </div>
