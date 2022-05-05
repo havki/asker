@@ -1,29 +1,13 @@
 import { createSlice} from "@reduxjs/toolkit";
 import { date } from "../../helpers/Date";
-import { cluesFetch,categoriesFetch } from "../asyncActions/clues";
+import { initialState } from "./initialState";
+import { extraReducers } from "./extraReducers";
 
 
 
 export const authSlice = createSlice({
   name: "auth",
-  initialState: {
-    questId: null,
-    questValue: 0,
-    user: null,
-    loading: "",
-    categories: null,
-    show: false,
-    catId: null,
-    questionData: null,
-    currentGame: {
-      statCount: 0,
-      statRight: 0,
-      statWrong: 0,
-      statSumPoints: 0,
-      statStart: null,
-      statEndGame: null,
-    },
-  },
+  initialState,
   reducers: {
     doSome: (state, action) => {},
     addUser: (state, action) => {
@@ -93,53 +77,7 @@ export const authSlice = createSlice({
       };
     },
   },
-  extraReducers: {
-    [categoriesFetch.pending]: (state) => {
-      state.loading = "loading";
-    },
-    [categoriesFetch.fulfilled]: (state, action) => {
-      state.categories = action.payload;
-
-      state.loading = "complete";
-    },
-    [categoriesFetch.rejected]: (state) => {
-      state.loading = "loading";
-    },
-
-    [cluesFetch.pending]: (state) => {
-      state.loading = "loading";
-    },
-    [cluesFetch.fulfilled]: (state, action) => {
-      const { data, id, title } = action.payload;
-      console.log(action.payload);
-      if (data.clues.length > 5) {
-        data.clues.length = 5;
-      }
-
-      let clues = data.clues.map((item) => {
-        return {
-          ...item,
-          right: null,
-        };
-      });
-
-      let datas = {
-        id,
-        title,
-        clues,
-      };
-      state.categories.push(data);
-      state.categories.splice(0, 1);
-      console.log(datas);
-
-      state.loading = "complete";
-    },
-    [cluesFetch.rejected]: (state) => {
-      state.loading = "loading";
-    },
-
-    
-  },
+  extraReducers
 });
 
 export const {

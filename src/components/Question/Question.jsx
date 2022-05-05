@@ -30,17 +30,37 @@ const style = {
   zIndex: 9999,
 };
 
-export default function Question({ id, closed }) {
-
-  const [open, setOpen] = React.useState(true);
+function Question() {
   const [answer, setAnswer] = React.useState(null);
 
   const dispatch = useDispatch();
-  const { questionData, questValue} = useSelector(
-    (state) => state.auth
-  );
-  const [seconds, setSeconds] = React.useState(10);
+  const { questionData, questValue } = useSelector((state) => state.auth);
+  const [seconds, setSeconds] = React.useState(7);
   const intervalRef = React.useRef();
+  const isMounted = React.useRef(false);
+
+  React.useEffect(() => {
+    if (isMounted.current) {
+      if (seconds < 1) {
+        notify();
+        dispatch(addWrong());
+        dispatch(addStatPoints(-questValue));
+        setTimeout(() => {
+          dispatch(showQuestion(false));
+        }, 1000);
+        dispatch(colorChanger("wrong"));
+        console.log("once");
+      }
+    } else {
+      isMounted.current = true;
+    }
+    intervalRef.current = setInterval(() => {
+      setSeconds((sec) => sec - 1);
+    }, 1000);
+    return () => {
+      clearInterval(intervalRef.current);
+    };
+  }, [seconds]);
 
   const notify = () => {
     toast.error("Ответ не верный!", {
@@ -54,31 +74,6 @@ export default function Question({ id, closed }) {
     });
   };
 
-  React.useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      setSeconds((sec) => sec - 1);
-    }, 1000);
-    return () => {
-      clearInterval(intervalRef.current);
-    };
-  }, []);
-
-  const cancelInterval = () => {
-    if (seconds < 1) {
-      clearInterval(intervalRef.current);
-      dispatch(colorChanger("wrong"));
-      notify();
-      setTimeout(() => {
-        dispatch(showQuestion(false));
-      }, 1000);
-    }
-  };
-
-  cancelInterval();
-
-  const handleOpen = () => setOpen(true);
-
-  const handleClose = () => setOpen(false);
 
   const changeHandler = (e) => {
     setAnswer(e.target.value);
@@ -101,9 +96,6 @@ export default function Question({ id, closed }) {
     }, 1000);
   };
 
-  if (seconds < 1) {
-  }
-
   if (!questionData) {
     return <Loading />;
   }
@@ -111,7 +103,7 @@ export default function Question({ id, closed }) {
   return (
     <div>
       <Modal
-        open={open}
+        open={true}
         // onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
@@ -151,3 +143,5 @@ export default function Question({ id, closed }) {
     </div>
   );
 }
+
+export default Question;

@@ -20,7 +20,6 @@ export const cluesFetch = createAsyncThunk(
   "clues/get",
   async ({ id, title }, { rejectWithValue, getState }) => {
     try {
-      console.log(id);
       const res = await axios.get(`/category?id=${id}`);
       if (!res?.data) {
         throw new Error();

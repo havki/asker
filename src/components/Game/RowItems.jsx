@@ -16,11 +16,12 @@ function RowItems({ id, title, clues }) {
 
   useEffect(() => {
     if (!clues && isMounted.current) {
+      console.log('id', id)
       dispatch(cluesFetch({ id, title }));
     } else {
       isMounted.current = true;
     }
-  }, [dispatch, id]);
+  }, [clues,id]);
 
   const showQuest = (item, e) => {
     dispatch(setQuestId(item.id));
@@ -34,6 +35,7 @@ function RowItems({ id, title, clues }) {
   if (!clues) {
     return <Loading />;
   }
+
   return (
     <div className={styles.itemRow}>
       {clues.map((item) => {

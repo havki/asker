@@ -34,7 +34,6 @@ function Layout() {
           <h3>Статистика</h3>
         </NavLink>
       </div>
-
       <Outlet />
     </div>
   );

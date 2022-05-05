@@ -31,7 +31,6 @@ function Stat() {
     dispatch(addUser(null));
     dispatch(addEnd());
   };
- 
 
   const rows = [
     createData(statCount, statRight, statWrong, statSumPoints, statStart),

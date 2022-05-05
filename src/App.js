@@ -9,7 +9,7 @@ import Stat from "./components/Stat/Stat";
 import { categoriesFetch } from "./store/asyncActions/clues";
 
 function App() {
-  const { user, catId } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
